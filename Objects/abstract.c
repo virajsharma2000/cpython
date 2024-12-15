@@ -985,8 +985,12 @@ binary_op1(PyObject *v, PyObject *w, const int op_slot
 static PyObject *
 binop_type_error(PyObject *v, PyObject *w, const char *op_name)
 {
+    /* here I want to resolve the op_name to eli5 friendly words - 
+    like adding, subtracting - instead of + and - . 
+    also changing the core error
+    */
     PyErr_Format(PyExc_TypeError,
-                 "unsupported operand type(s) for %.100s: "
+                 "Python says : You are adding different kinds of values (like trying to add words to numbers) %.100s: "
                  "'%.100s' and '%.100s'",
                  op_name,
                  Py_TYPE(v)->tp_name,

@@ -48,7 +48,7 @@ def interactive_console(mainmodule=None, quiet=False, pythonstartup=False):
     # set sys.{ps1,ps2} just before invoking the interactive interpreter. This
     # mimics what CPython does in pythonrun.c
     if not hasattr(sys, "ps1"):
-        sys.ps1 = ">>> "
+        sys.ps1 = "virajs-fantastic-python>>> "
     if not hasattr(sys, "ps2"):
         sys.ps2 = "... "
 

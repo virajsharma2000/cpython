@@ -221,7 +221,7 @@ class InteractiveConsole(InteractiveInterpreter):
             sys.ps1
             delete_ps1_after = False
         except AttributeError:
-            sys.ps1 = ">>> "
+            sys.ps1 = "virajs-fantastic-python>>> "
             delete_ps1_after = True
         try:
             sys.ps2

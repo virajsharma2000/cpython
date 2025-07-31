@@ -182,6 +182,8 @@ _PyRun_InteractiveLoopObject(FILE *fp, PyObject *filename, PyCompilerFlags *flag
 int
 PyRun_InteractiveLoopFlags(FILE *fp, const char *filename, PyCompilerFlags *flags)
 {
+    fprintf(stderr, "=== Welcome to viraj's fantastic python ===\n");
+
     PyObject *filename_obj = PyUnicode_DecodeFSDefault(filename);
     if (filename_obj == NULL) {
         PyErr_Print();

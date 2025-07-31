@@ -61,6 +61,20 @@
 // Define them as macros to make sure that they are always inlined by the
 // preprocessor.
 
+#ifdef MS_WINDOWS
+    /* Pre‑overflow detection using current stack pointer */
+    {
+        void *sp = _AddressOfReturnAddress();
+        ULONG_PTR low, high;
+        GetCurrentThreadStackLimits(&low, &high);
+        if ((char*)sp < (char*)low + (64 * 1024)) {
+            PyErr_SetString(PyExc_RuntimeError,
+                "Approaching C‑stack overflow—execution halted");
+            return NULL;
+        }
+    }
+#endif
+
 #undef Py_IS_TYPE
 #define Py_IS_TYPE(ob, type) \
     (_PyObject_CAST(ob)->ob_type == (type))

@@ -1344,6 +1344,33 @@ This limit prevents infinite recursion from causing an overflow of the C
 stack and crashing Python.  The highest possible limit is platform-
 dependent.
 [clinic start generated code]*/
+#ifdef MS_WINDOWS
+#include <windows.h>
+
+/* Query OS stack bounds and compute max safe recursion */
+static int max_safe_recursion(void) {
+    ULONG_PTR low, high;
+    GetCurrentThreadStackLimits(&low, &high);
+    SIZE_T stack_size = high - low;
+    return (int)(stack_size / 8192) - 50;
+}
+
+/* Safe version enforcing cap before setting recursion limit */
+static PyObject *
+sys_setrecursionlimit_safe(PyObject *self, PyObject *args) {
+    int new_limit;
+    if (!PyArg_ParseTuple(args, "i:setrecursionlimit", &new_limit))
+        return NULL;
+    int maxlim = max_safe_recursion();
+    if (new_limit > maxlim) {
+        PyErr_Format(PyExc_ValueError,
+            "Recursion limit too high: maximum safe is %d", maxlim);
+        return NULL;
+    }
+    PyThreadState_GET()->interp->recursion_limit = new_limit;
+    Py_RETURN_NONE;
+}
+#endif
 
 static PyObject *
 sys_setrecursionlimit_impl(PyObject *module, int new_limit)
